@@ -3,6 +3,7 @@ package com.kimeeo.kAndroid.map;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,8 +48,7 @@ import java.util.Map;
 /**
  * Created by bhavinpadhiyar on 2/3/16.
  */
-abstract public class BaseMapView extends BaseListDataView implements MonitorList.OnChangeWatcher
-{
+abstract public class BaseMapView extends BaseListDataView implements MonitorList.OnChangeWatcher {
     public static int VIEW_TYPE = GoogleMap.MAP_TYPE_NORMAL;
     protected SupportMapFragment mapFragment;
     protected GoogleMap googleMap;
@@ -151,11 +152,13 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
         marker.setPosition(latLng);
         marker.notifyAll();
     }
+
     public void updateLatLng(Marker marker, Double latitude, Double longitude) {
         LatLng latLng = new LatLng(latitude, longitude);
         marker.setPosition(latLng);
         marker.notifyAll();
     }
+
     protected void configDataManager(DataProvider dataProvider) {
         if (dataProvider != null) {
             dataProvider.addFatchingObserve(this);
@@ -167,8 +170,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
 
     protected void garbageCollectorCall() {
         super.garbageCollectorCall();
-        if(googleMap!=null)
-        {
+        if (googleMap != null) {
             googleMap.setOnMarkerClickListener(null);
             googleMap.setOnInfoWindowClickListener(null);
             googleMap.setOnMyLocationChangeListener(null);
@@ -176,16 +178,16 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
 
         }
         clearOnGlobalLayoutListener();
-        mapFragment= null;
+        mapFragment = null;
         googleMap = null;
-        myLocation =null;
-        updatePending=null;
-        markerInfo=null;
+        myLocation = null;
+        updatePending = null;
+        markerInfo = null;
     }
 
-    public void drawLine(IPOI src,IPOI dest,int color) {
-        LatLng latLng1 = new LatLng(src.getLatitude(),src.getLongitude());
-        LatLng latLng2 = new LatLng(dest.getLatitude(),dest.getLongitude());
+    public void drawLine(IPOI src, IPOI dest, int color) {
+        LatLng latLng1 = new LatLng(src.getLatitude(), src.getLongitude());
+        LatLng latLng2 = new LatLng(dest.getLatitude(), dest.getLongitude());
         getGoogleMap().addPolyline((new PolylineOptions()).add(latLng1).add(latLng2).width(2).color(color).geodesic(true));
     }
 
@@ -193,31 +195,29 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
         getGoogleMap().addPolyline((new PolylineOptions()).add(src).add(dest).width(2).color(color).geodesic(true));
     }
 
-    public void drawLine(Location src,Location dest,int color) {
-        LatLng latLng1 = new LatLng(src.getLatitude(),src.getLongitude());
-        LatLng latLng2 = new LatLng(dest.getLatitude(),dest.getLongitude());
+    public void drawLine(Location src, Location dest, int color) {
+        LatLng latLng1 = new LatLng(src.getLatitude(), src.getLongitude());
+        LatLng latLng2 = new LatLng(dest.getLatitude(), dest.getLongitude());
         getGoogleMap().addPolyline((new PolylineOptions()).add(latLng1).add(latLng2).width(2).color(color).geodesic(true));
     }
 
-    public void drawLine(IPOI src,Location dest,int color) {
-        LatLng latLng1 = new LatLng(src.getLatitude(),src.getLongitude());
-        LatLng latLng2 = new LatLng(dest.getLatitude(),dest.getLongitude());
+    public void drawLine(IPOI src, Location dest, int color) {
+        LatLng latLng1 = new LatLng(src.getLatitude(), src.getLongitude());
+        LatLng latLng2 = new LatLng(dest.getLatitude(), dest.getLongitude());
         getGoogleMap().addPolyline((new PolylineOptions()).add(latLng1).add(latLng2).width(2).color(color).geodesic(true));
     }
 
-    public void drawLine(Location src,IPOI dest,int color) {
-        LatLng latLng1 = new LatLng(src.getLatitude(),src.getLongitude());
-        LatLng latLng2 = new LatLng(dest.getLatitude(),dest.getLongitude());
+    public void drawLine(Location src, IPOI dest, int color) {
+        LatLng latLng1 = new LatLng(src.getLatitude(), src.getLongitude());
+        LatLng latLng2 = new LatLng(dest.getLatitude(), dest.getLongitude());
         getGoogleMap().addPolyline((new PolylineOptions()).add(latLng1).add(latLng2).width(2).color(color).geodesic(true));
     }
 
-    public GoogleMap getGoogleMap()
-    {
+    public GoogleMap getGoogleMap() {
         return googleMap;
     }
 
-    public boolean showMenu()
-    {
+    public boolean showMenu() {
         return true;
     }
 
@@ -253,11 +253,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
             FragmentManager fragmentManager = getChildFragmentManager();
             mapFragment = getSupportMapFragment(rootView, fragmentManager);
             googleMap = mapFragment.getMap();
-            try {
-                MapsInitializer.initialize(getActivity());
-            } catch (GooglePlayServicesNotAvailableException e) {
-                e.printStackTrace();
-            }
+            MapsInitializer.initialize(getActivity());
             setHasOptionsMenu(showMenu());
             viewCreated(rootView);
 
@@ -273,12 +269,16 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
             return rootView;
         }
     }
+
     @Override
     protected String[] requirePermissions() {
         return new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, "com.google.android.providers.gsf.permission.READ_GSERVICES"};
     }
+
     @Override
-    public String[] getFriendlyPermissionsMeaning() {return new String[]{"Location"};}
+    public String[] getFriendlyPermissionsMeaning() {
+        return new String[]{"Location"};
+    }
 
     protected void configMapView(GoogleMap googleMap, SupportMapFragment mapFragment, DataProvider dataProvider) {
 
@@ -358,7 +358,9 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
     }
 
     protected void setUpMap(GoogleMap googleMap) {
-        googleMap.setMyLocationEnabled(true);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            googleMap.setMyLocationEnabled(true);
+
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setZoomGesturesEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
