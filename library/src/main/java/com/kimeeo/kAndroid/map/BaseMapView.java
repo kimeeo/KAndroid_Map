@@ -27,6 +27,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -249,19 +250,27 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
 
         try {
             configViewParam();
-            View rootView = createRootView(inflater, container, savedInstanceState);
+            final View rootView = createRootView(inflater, container, savedInstanceState);
             FragmentManager fragmentManager = getChildFragmentManager();
             mapFragment = getSupportMapFragment(rootView, fragmentManager);
-            googleMap = mapFragment.getMap();
-            MapsInitializer.initialize(getActivity());
-            setHasOptionsMenu(showMenu());
-            viewCreated(rootView);
+            mapFragment.getMapAsync(new OnMapReadyCallback()
+            {
+                @Override
+                public void onMapReady(GoogleMap map) {
+                    googleMap =map;
 
-            if (rootView.findViewById(R.id.progressBar) != null)
-                mProgressBar = rootView.findViewById(R.id.progressBar);
+                    MapsInitializer.initialize(getActivity());
+                    setHasOptionsMenu(showMenu());
+                    viewCreated(rootView);
+                    if (rootView.findViewById(R.id.progressBar) != null)
+                        mProgressBar = rootView.findViewById(R.id.progressBar);
 
-            configMapView(googleMap, mapFragment, getDataProvider());
-            next();
+                    configMapView(googleMap, mapFragment, getDataProvider());
+                    next();
+                }
+            });
+
+
             return rootView;
         } catch (Exception e) {
             View rootView = createRootMapNotSupportedView(inflater, container, savedInstanceState, BuildConfig.DEBUG);
