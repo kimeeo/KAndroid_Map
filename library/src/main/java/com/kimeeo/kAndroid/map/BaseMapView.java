@@ -297,6 +297,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
     }
 
     public void setMapStyle(@RawRes int value) {
+
         mapStyle=value;
         if(googleMap!=null)
         {
