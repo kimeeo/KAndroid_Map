@@ -295,6 +295,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
 
     @RawRes
     protected int getMapStyle() {
+
         return -1;
     }
 
