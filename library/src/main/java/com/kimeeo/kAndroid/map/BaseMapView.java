@@ -262,7 +262,8 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
                 public void onMapReady(GoogleMap map) {
                     googleMap =map;
 
-                    setMapStyle(getMapStyle());
+                    if(getDefaultMapStyle()!=-1)
+                        setMapStyle(getDefaultMapStyle());
 
                     MapsInitializer.initialize(getActivity());
                     setHasOptionsMenu(showMenu());
@@ -290,11 +291,15 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
         return mapStyle;
     }
 
+    @RawRes
+    protected int getDefaultMapStyle() {
+        return -1;
+    }
+
     public void setMapStyle(@RawRes int value) {
         mapStyle=value;
         if(googleMap!=null)
         {
-
             if(getMapStyle()!=-1)
             {
                 try {
