@@ -294,6 +294,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
         mapStyle=value;
         if(googleMap!=null)
         {
+
             if(getMapStyle()!=-1)
             {
                 try {
