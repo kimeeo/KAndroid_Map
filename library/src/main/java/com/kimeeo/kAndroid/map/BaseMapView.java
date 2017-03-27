@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.RawRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -259,6 +262,17 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
                 public void onMapReady(GoogleMap map) {
                     googleMap =map;
 
+
+                    if(getMapStyle()!=-1) {
+                        try {
+                            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity(), getMapStyle()));
+                        }catch (Resources.NotFoundException e)
+                        {
+
+                        }
+
+                    }
+
                     MapsInitializer.initialize(getActivity());
                     setHasOptionsMenu(showMenu());
                     viewCreated(rootView);
@@ -277,6 +291,11 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
             viewCreated(rootView);
             return rootView;
         }
+    }
+
+    @RawRes
+    protected int getMapStyle() {
+        return -1;
     }
 
     @Override
