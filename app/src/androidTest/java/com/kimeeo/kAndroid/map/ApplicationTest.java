@@ -1,4 +1,4 @@
-package com.kimeeo.kAndroid.map;
+package com.kimeeo.kAndroid.mapDemo;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

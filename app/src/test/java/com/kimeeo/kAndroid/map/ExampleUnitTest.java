@@ -1,4 +1,4 @@
-package com.kimeeo.kAndroid.map;
+package com.kimeeo.kAndroid.mapDemo;
 
 import org.junit.Test;
 

@@ -397,10 +397,22 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
         if (googleMap != null)
             setUpMap(googleMap);
     }
+    @Override
+    protected void permissionGranted() {
+        try {
+            if (googleMap!=null && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                googleMap.setMyLocationEnabled(true);
+        }catch (Exception e){}
+    }
+
+
 
     protected void setUpMap(GoogleMap googleMap) {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            googleMap.setMyLocationEnabled(true);
+        try {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                googleMap.setMyLocationEnabled(true);
+        }catch (Exception e){}
+
 
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setZoomGesturesEnabled(true);
@@ -488,10 +500,14 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
         super.onLowMemory();
     }
 
-    protected void removePOIMarker(IPOI poi) {
-        if(googleMap!=null)
-            poi.getMarker().remove();
-
+    protected boolean removePOIMarker(IPOI poi) {
+        try {
+            if(googleMap!=null) {
+                poi.getMarker().remove();
+                return true;
+            }
+        }catch (Exception e){}
+        return false;
     }
 
     protected void addPOIMarker(IPOI poi) {
