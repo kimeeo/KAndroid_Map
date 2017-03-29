@@ -34,6 +34,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:10.2.1'
     compile 'com.google.maps.android:android-maps-utils:0.5'
 
+    //
+    compile 'com.appolica:interactive-info-window:1.0.5'
 
 
 }

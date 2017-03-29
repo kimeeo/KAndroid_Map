@@ -25,6 +25,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import com.appolica.interactiveinfowindow.InfoWindow;
+import com.appolica.interactiveinfowindow.InfoWindowManager;
+import com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -60,7 +63,8 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
     GoogleMap.OnMarkerClickListener onMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(final Marker marker) {
-            return onMarkerTouch(markerInfo.get(marker.getId()));
+
+            return onMarkerTouch(marker,markerInfo.get(marker.getId()));
         }
     };
     GoogleMap.OnInfoWindowClickListener onInfoWindowClickListener = new GoogleMap.OnInfoWindowClickListener() {
@@ -256,6 +260,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
             final View rootView = createRootView(inflater, container, savedInstanceState);
             FragmentManager fragmentManager = getChildFragmentManager();
             mapFragment = getSupportMapFragment(rootView, fragmentManager);
+
             mapFragment.getMapAsync(new OnMapReadyCallback()
             {
                 @Override
@@ -272,9 +277,15 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
                         mProgressBar = rootView.findViewById(R.id.progressBar);
 
                     configMapView(googleMap, mapFragment, getDataProvider());
+
+
+
                     next();
                 }
             });
+
+
+
 
 
             return rootView;
@@ -475,8 +486,10 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
 
     }
 
-    public boolean onMarkerTouch(Object data)
+
+    public boolean onMarkerTouch(Marker marker,Object data)
     {
+
         return false;
     }
 
