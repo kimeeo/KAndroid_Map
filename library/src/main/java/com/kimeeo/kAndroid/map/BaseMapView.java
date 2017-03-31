@@ -25,10 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
-import com.appolica.interactiveinfowindow.InfoWindow;
-import com.appolica.interactiveinfowindow.InfoWindowManager;
-import com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -121,6 +117,10 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
 
 
     };
+
+
+
+
 
     protected int getBoundZoom() {
         return 80;
@@ -267,8 +267,11 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
                 public void onMapReady(GoogleMap map) {
                     googleMap =map;
 
+
                     if(getDefaultMapStyle()!=-1)
                         setMapStyle(getDefaultMapStyle());
+
+
 
                     MapsInitializer.initialize(getActivity());
                     setHasOptionsMenu(showMenu());
@@ -321,6 +324,48 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
             }
         }
     }
+    /*
+    GoogleMapStyler googleMapStyler = new GoogleMapStyler.Builder(MainActivity.this)
+            .setMainGeometryColorRes(R.color.maingeometrycolor)
+            .setAllPlaceTextStrokeAlpha(-80)
+            .setAllPlaceTextColorRes(R.color.adminstartivelabel)
+            .setAllMainTownTextColorRes(R.color.administativelocality)
+            .setAllPoiTextColorRes(R.color.poitext)
+            .setAllPoiParkBackgroundColorRes(R.color.poiparkbackground)
+            .setAllPoiParkTextColorRes(R.color.poilabel)
+            .setAllRoadBackgroundColorRes(R.color.roadbackground)
+            .setAllRoadTextColorRes(R.color.roadlabel)
+            .setAllRoadArterialBackgroundColorRes(R.color.roadarterialbackground)
+            .setAllRoadArterialStrokeColorRes(R.color.roadarterialstroke)
+            .setAllRoadHighwayBackgroundColorRes(R.color.roadhighway)
+            .setAllRoadHighwayStrokeColorRes(R.color.roadhighwaystroke)
+            .setAllRoadHighwayTextColorRes(R.color.roadhighwaylabel)
+            .setAllRoadLocalBackgroundColorRes(R.color.roadlocal)
+            .setAllRoadLocalStrokeColorRes(R.color.roadlocalstroke)
+            .setAllTransitStationTextColorRes(R.color.transitstationtext)
+            .setAllTransitBackgroundColorRes(R.color.transit)
+            .setAllWaterTextColorRes(R.color.waterlabel)
+            .setAllWaterBackgroundColorRes(R.color.water)
+            .setAllWaterTextStrokeAlpha(-20)
+            .build();
+           */
+
+    public void setMapStyle(GoogleMapStyler value) {
+        setMapStyle(value.getMapStyleOptions());
+    }
+    public void setMapStyle(MapStyleOptions var1) {
+        if(googleMap!=null)
+        {
+            if(getMapStyle()!=-1)
+            {
+                try {
+                    boolean success = googleMap.setMapStyle(var1);
+                }catch (Resources.NotFoundException e){}
+            }
+        }
+    }
+
+
 
     @Override
     protected String[] requirePermissions() {

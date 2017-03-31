@@ -34,8 +34,9 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:10.2.1'
     compile 'com.google.maps.android:android-maps-utils:0.5'
 
-    //
-    compile 'com.appolica:interactive-info-window:1.0.5'
 
 
+    //https://github.com/ac-opensource/MarkerBuilder?utm_source=android-arsenal.com&utm_medium=referral&utm_campaign=3217
+    //https://github.com/renaudcerrato/static-maps-api
+    compile 'com.github.renaudcerrato:static-maps-api:1.0.2'
 }
