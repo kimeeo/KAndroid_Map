@@ -40,8 +40,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.kimeeo.kAndroid.listViews.BaseListDataView;
-import com.kimeeo.kAndroid.listViews.dataProvider.DataProvider;
-import com.kimeeo.kAndroid.listViews.dataProvider.MonitorList;
+import com.kimeeo.kAndroid.dataProvider.DataProvider;
+import com.kimeeo.kAndroid.dataProvider.MonitorList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
