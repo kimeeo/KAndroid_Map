@@ -2,8 +2,8 @@ package com.kimeeo.kAndroid.mapDemo;
 
 
 import com.google.android.gms.maps.model.Marker;
-import com.kimeeo.kAndroid.listViews.dataProvider.DataModel;
-import com.kimeeo.kAndroid.listViews.dataProvider.IParseableObject;
+import com.kimeeo.kAndroid.dataProvider.DataModel;
+import com.kimeeo.kAndroid.dataProvider.IParseableObject;
 import com.kimeeo.kAndroid.map.IPOI;
 
 import java.util.List;

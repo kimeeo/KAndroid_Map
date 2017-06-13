@@ -3,7 +3,7 @@ package com.kimeeo.kAndroid.mapDemo;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
-import com.kimeeo.kAndroid.listViews.dataProvider.DataProvider;
+import com.kimeeo.kAndroid.dataProvider.DataProvider;
 import com.kimeeo.kAndroid.map.BaseMapView;
 
 /**
