@@ -139,6 +139,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
         }
     };
     private View mProgressBar;
+    //Todo: Support Multiple list of list
     private List<?> updatePending;
     private boolean firstItemIn = false;
 
@@ -487,6 +488,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
 
         if (updatePending != null)
         {
+            //Todo: Support Multiple list of list
             itemsAdded(0, updatePending);
             updatePending = null;
         }
