@@ -5,6 +5,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -14,6 +16,40 @@ import java.util.Locale;
  */
 public class MapUtils {
 
+    public static Distance getDistance(Location source,LatLng latLng){
+        if(source!=null && latLng!=null) {
+            Location locationA = new Location("point A");
+            locationA.setLatitude(latLng.latitude);
+            locationA.setLongitude(latLng.longitude);
+
+
+            Location locationB = new Location("point B");
+            locationB.setLatitude(source.getLatitude());
+            locationB.setLongitude(source.getLongitude());
+
+
+            Distance distance = new Distance();
+            distance.distanceMeters = locationA.distanceTo(locationB);
+            distance.distanceKM = Math.round(locationA.distanceTo(locationB) / 1000);
+            distance.distanceMiles = (distance.distanceMeters * 0.000621371192237334);
+
+
+            if(distance.distanceMeters<=500)
+            {
+                distance.redableDistanceKM = Math.round(distance.distanceMeters) +" Meters";
+                distance.redableDistanceMiles = Math.round(distance.distanceMeters) +" Meters";
+            }
+            else {
+                distance.redableDistanceKM = Math.round(distance.distanceKM) +" KM";
+                distance.redableDistanceMiles = Math.round(distance.distanceMiles) +" Miles";
+            }
+
+
+            return distance;
+
+        }
+        return null;
+    }
     public static Distance getDistance(Location source,Location dest){
 
         if(source!=null && dest!=null) {
@@ -154,8 +190,9 @@ public class MapUtils {
         return null;
     }
 
-    public static List<AddressVO> getAddress(Activity activity,Location loc,int size)
-    {
+
+
+    public static List<AddressVO> getAddress(Activity activity,Location loc,int size) {
         try {
             Geocoder geocoder;
             List<Address> addresses;
@@ -174,9 +211,7 @@ public class MapUtils {
         }
         return null;
     }
-
-    public static List<AddressVO> getAddress(Activity activity,IPOI poi,int size)
-    {
+    public static List<AddressVO> getAddress(Activity activity,IPOI poi,int size) {
         try {
             Geocoder geocoder;
             List<Address> addresses;

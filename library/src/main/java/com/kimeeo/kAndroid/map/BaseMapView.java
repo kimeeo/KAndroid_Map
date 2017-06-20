@@ -126,6 +126,10 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
         return 80;
     }
 
+    public Location getMyLocation() {
+        return myLocation;
+    }
+
     private Location myLocation;
     GoogleMap.OnMyLocationChangeListener onMyLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
@@ -364,14 +368,10 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
             }
         }
     }
-
-
-
     @Override
     protected String[] requirePermissions() {
         return new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, "com.google.android.providers.gsf.permission.READ_GSERVICES"};
     }
-
     @Override
     public String[] getFriendlyPermissionsMeaning() {
         return new String[]{"Location"};
@@ -380,17 +380,14 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
     protected void configMapView(GoogleMap googleMap, SupportMapFragment mapFragment, DataProvider dataProvider) {
 
     }
-
     protected void viewCreated(View rootView) {
 
     }
-
     public void navigateTo(IPOI poi) {
         String locationURL = "http://maps.google.com/maps?saddr=" + myLocation.getLatitude() + "," + myLocation.getLongitude() + "&daddr=" + poi.getLatitude() + "," + poi.getLongitude() + "";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(locationURL));
         startActivity(intent);
     }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.map_menu_options, menu);
@@ -411,7 +408,6 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
 
         super.onCreateOptionsMenu(menu, inflater);
     }
-
     public boolean onOptionsItemSelected(MenuItem item) {
         item.setChecked(true);
 
@@ -436,16 +432,13 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
 
         return super.onOptionsItemSelected(item);
     }
-
     public void setMenuIcons(Menu menu, MenuInflater inflater) {
 
     }
-
     public void updateMapView(int type) {
         if (googleMap != null)
             googleMap.setMapType(type);
     }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -493,6 +486,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
 
     }
 
+
     public void myLocationChange(Location location) {
 
     }
@@ -500,25 +494,64 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
     public Distance getDistanceFromMyLocation(Location loc){
         return MapUtils.getDistance(myLocation,loc);
     }
-
     public Distance getDistanceFromMyLocation(IPOI loc){
         return MapUtils.getDistance(myLocation,loc);
     }
+    public Distance getDistanceFromMyLocation(LatLng latLng){
+        return MapUtils.getDistance(myLocation,latLng);
+    }
+    public Distance getDistanceFromMyLocation(double latitude,double longitude){
+        LatLng latLng =new LatLng(latitude, longitude);
+        return getDistanceFromMyLocation(latLng);
+    }
 
-    public void moveCameraToLocation( IPOI newPOI) {
+
+    protected int getDefaultZoom() {
+        return 15;
+    }
+    public void moveCameraToPOI( IPOI newPOI,int zoom) {
         if(newPOI!=null && googleMap!=null) {
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(newPOI.getLatitude(), newPOI.getLongitude())).zoom(15).build();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(newPOI.getLatitude(), newPOI.getLongitude())).zoom(zoom).build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
-
-    public void moveCameraToLocation( Location location) {
+    public void moveCameraToPOI( IPOI newPOI) {
+        moveCameraToPOI(newPOI,getDefaultZoom());
+    }
+    public void moveCameraToLocation( Location location,int zoom) {
         if(location !=null && googleMap!=null) {
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(zoom).build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
-
+    public void moveCameraToLocation( Location location) {
+        moveCameraToLocation(location,getDefaultZoom());
+    }
+    public void moveCameraToLatLng( double latitude,double longitude,int zoom) {
+        if(googleMap!=null) {
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latitude, longitude)).zoom(zoom).build();
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+    }
+    public void moveCameraToLatLng( double latitude,double longitude) {
+        moveCameraToLatLng(latitude,longitude,getDefaultZoom());
+    }
+    public void moveCameraToLatLng( LatLng latLng,int zoom) {
+        if(googleMap!=null) {
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(zoom).build();
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+    }
+    public void moveCameraToLatLng( LatLng latLng) {
+        moveCameraToLatLng(latLng,getDefaultZoom());
+    }
+    public void moveCameraToMyLocation(int zoom){
+        Location location = myLocation;
+        if(location !=null && googleMap!=null) {
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(zoom).build();
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+    }
     public void moveCameraToMyLocation() {
         Location location = myLocation;
         if(location !=null && googleMap!=null) {
@@ -526,7 +559,6 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
-
     public void onInfoWindowTouch(Object data) {
 
     }
@@ -696,7 +728,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
                         addPOIMarker(poi);
                 }
             }
-            fitMapToPins();
+            //fitMapToPins();
         }
 
         if(mProgressBar!=null)
@@ -716,7 +748,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
                 else
                     removedItem(pos,item);
             }
-            fitMapToPins();
+            //fitMapToPins();
         }
         if(mProgressBar!=null)
             mProgressBar.setVisibility(View.GONE);
