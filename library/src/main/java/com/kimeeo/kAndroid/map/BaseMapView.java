@@ -139,7 +139,8 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
         }
     };
     private View mProgressBar;
-    private boolean updatePending=false;
+    //Todo: Support Multiple list of list
+    private List<?> updatePending;
     private boolean firstItemIn = false;
 
     public HashMap<String, Object> getMarkers() {
@@ -189,7 +190,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
         mapFragment = null;
         googleMap = null;
         myLocation = null;
-        updatePending = false;
+        updatePending = null;
         markerInfo = null;
     }
 
@@ -485,11 +486,13 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
 
         updateMapView(VIEW_TYPE);
 
-        if (updatePending)
+        if (updatePending != null)
         {
-            itemsAdded(0, getDataProvider());
-            updatePending = false;
+            //Todo: Support Multiple list of list
+            itemsAdded(0, updatePending);
+            updatePending = null;
         }
+
     }
 
     public void myLocationChange(Location location) {
@@ -682,7 +685,7 @@ abstract public class BaseMapView extends BaseListDataView implements MonitorLis
     public void itemsAdded(int pos,List dataList) {
         if(googleMap==null)
         {
-            updatePending=true;
+            updatePending=dataList;
         }
         else
         {
